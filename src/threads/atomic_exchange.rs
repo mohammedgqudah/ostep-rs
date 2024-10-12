@@ -71,8 +71,10 @@ impl<T> Mutex<T> {
             // Note: On success, use `Acquire` because I want all memory operations from the
             // previous thread to be visible in this thread. (MutexGuard::drop uses `Ordering::Release`).
             // On failure use `Relaxed`, because it doesn't matter since we're not accessing shared memory.
-            // TODO: use compare_exchange_weak since we're in a loop?
-            match self.flag.compare_exchange(
+            //
+            // Note: compare_exchange_weak is allowed to spuriously fail (results in efficient code
+            // on some platforms).
+            match self.flag.compare_exchange_weak(
                 MUTEX_AVAILABLE,
                 MUTEX_LOCKED,
                 Ordering::Acquire,
