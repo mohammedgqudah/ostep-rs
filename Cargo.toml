@@ -5,3 +5,8 @@ edition = "2021"
 
 [dependencies]
 libc = "0.2.159"
+
+
+[[bin]]
+name = "bug_lock_order"
+path = "src/threads/bug_lock_order.rs"
